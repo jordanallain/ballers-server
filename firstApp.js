@@ -2,6 +2,12 @@ const fs = require('fs')
 const http = require('http')
 // const url = require('url')
 
+const players = [
+  { name: 'Kyrie Irving', position: 'PG' },
+  { name: 'Jaylen Brown', position: 'SG' },
+  { name: 'Jayson Tatum', position: 'SF' }
+]
+
 // store user name and password for mysportsfeed API key in .env file with
 // USERNAME=<username>
 // PASSWORD=<password>
@@ -21,14 +27,12 @@ const port = 4741
 const server = http.createServer((req, res) => {
   console.log(req)
   // if(req.method === 'GET') {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     // res.write('Where will this show')
-    // res.send('{"key":"value"}')
-    res.end(JSON.stringify({
-      name: 'asad',
-      class: 'paewe'
-    }))
+    res.end(JSON.stringify(players))
   // }
 })
 
@@ -42,9 +46,9 @@ server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`)
 })
 
-server.on('request', (req, res) => {
-  res.body = 'Hi?'
-})
+// server.on('request', (req, res) => {
+//   res.body = 'Hi?'
+// })
 
 // close server with message
 server.on('close', () => {
