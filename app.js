@@ -1,6 +1,13 @@
+const fetch = require('node-fetch')
+const btoa = require('btoa')
 const fs = require('fs')
 const http = require('http')
+const express = require('express')
+const bodyParser = require('body-parser')
 // const url = require('url')
+
+const app = express()
+app.use(bodyParser.json())
 
 // store user name and password for mysportsfeed API key in .env file with
 // USERNAME=<username>
@@ -17,25 +24,32 @@ password = password.split('=')[1]
 const hostname = 'localhost'
 const port = 4741
 
-// create the server
-const server = http.createServer((req, res) => {
-  console.log(req)
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/plain')
-  res.end('Hello World\n')
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
 })
 
-// handle client errors
-server.on('clientError', (err, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
+app.get('/players', (req, res) => {
+  fetch(`https://api.mysportsfeeds.com/v1.0/pull/nba/2017-2018-regular/cumulative_player_stats.json`, {
+     method: "GET",
+     mode: "cors",
+     cache: "no-cache",
+     credentials: "same-origin",
+     headers: {
+         "Content-Type": "application/json; charset=utf-8",
+         "Authorization": "Basic " + btoa(userName + ":" + password)
+     },
+     redirect: "follow",
+     referrer: "no-referrer"
+   })
+     .then(function (response) {
+       return response.json()
+     })
+     .then((response) => res.status(200).send(response))
+     .catch(console.error)
+  // const response = JSON.stringify(players)
+  // res.status(200).send(response)
 })
 
-// listen on host and port
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
-})
-
-// close server with message
-server.on('close', () => {
-  console.log('Goodbye')
-})
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
