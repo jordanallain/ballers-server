@@ -1,0 +1,14 @@
+{
+  "name": "smallerballerapi",
+  "version": "1.0.0",
+  "description": "API for basketball players",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Jordan Allain <jallain@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
