@@ -1,10 +1,8 @@
 const fetch = require('node-fetch')
 const btoa = require('btoa')
 const fs = require('fs')
-const http = require('http')
 const express = require('express')
 const bodyParser = require('body-parser')
-// const url = require('url')
 
 const app = express()
 app.use(bodyParser.json())
@@ -19,10 +17,6 @@ let password = fs.readFileSync('./.env', {encoding: 'utf8'}).split('\n')[1]
 // following two lines extract just the user name and password values
 userName = userName.split('=')[1]
 password = password.split('=')[1]
-
-// set up host and port
-const hostname = 'localhost'
-const port = 4741
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
@@ -48,8 +42,6 @@ app.get('/players', (req, res) => {
      })
      .then((response) => res.status(200).send(response))
      .catch(console.error)
-  // const response = JSON.stringify(players)
-  // res.status(200).send(response)
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(4741, () => console.log(`Example app listening on port 4741!`))
